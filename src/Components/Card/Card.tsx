@@ -11,7 +11,7 @@ type CardProps = {
 const Card: React.FC<CardProps> = ({ message, priority }) => {
   return <MessagesContext.Consumer>
     {context => (
-      <CardContainer priority={priority}>
+      <CardContainer className={`${priority}`} priority={priority} data-testid="card">
         <p>
           {message}
         </p>

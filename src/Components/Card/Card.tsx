@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 import { MessagesContext } from '../../context';
-import { CardContainer } from './Card.style';
+import { CardContainer } from '@Components/Card/Card.style';
 
 type CardProps = {
   message: string;

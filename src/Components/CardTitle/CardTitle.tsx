@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardTitleContainer } from './CardTitle.style';
+import { CardTitleContainer } from '@Components/CardTitle/CardTitle.style';
 
 type CardTitleProps = {
   title: string;

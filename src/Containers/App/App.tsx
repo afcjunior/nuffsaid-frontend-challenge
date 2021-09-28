@@ -2,11 +2,10 @@ import { Button } from '@material-ui/core';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import toast, { ToastPosition } from 'react-hot-toast';
 import generateMessage, { Message } from '../../Api';
-import PageTitle from '../../Components/PageTitle/PageTitle';
-import CardRenderer from '../../Components/CardRenderer/CardRenderer';
+import { CardRenderer, PageTitle } from '@Components';
+import { Container, ToastContainer } from '@Containers/App/App.style';
 import { ContextType, MessagesContext } from '../../context';
 import { ERROR_PRIORITY, ERROR_COLOR } from '../../constants';
-import { Container, ToastContainer } from './App.style';
 
 const toastConfig = {
   duration: 2000,

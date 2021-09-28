@@ -1,5 +1,5 @@
 import React from 'react';
-import { TitleContainer } from './PageTitle.style';
+import { TitleContainer } from '@Components/PageTitle/PageTitle.style';
 
 interface PageTitleProps {
   title?: string;

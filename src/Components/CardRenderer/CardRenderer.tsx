@@ -1,8 +1,7 @@
 import React from 'react';
 import { Message } from '../../Api';
-import Card from '../Card/Card';
-import CardTitle from '../CardTitle/CardTitle';
-import { CardRendererContainer } from './CardRenderer.style';
+import { Card, CardTitle } from '@Components';
+import { CardRendererContainer } from '@Components/CardRenderer/CardRenderer.style';
 
 type CardRendererProps = {
   messages: Message[];

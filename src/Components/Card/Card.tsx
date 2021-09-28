@@ -1,28 +1,28 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
-import { MessagesContext } from '../../context';
 import { CardContainer } from '@Components/Card/Card.style';
+import { Priority } from '../../types';
+import { useSocket } from '../../Hooks/useSocket';
 
 type CardProps = {
   message: string;
-  priority: number;
+  priority: Priority;
 };
 
 const Card: React.FC<CardProps> = ({ message, priority }) => {
-  return <MessagesContext.Consumer>
-    {context => (
-      <CardContainer className={`${priority}`} priority={priority} data-testid="card">
-        <p>
-          {message}
-        </p>
-        <div>
-          <Button onClick={() => context?.removeSpecificMessage(message)}>
-            Clear
-          </Button>
-        </div>
-      </CardContainer>
-    )}
-  </MessagesContext.Consumer>;
+  const { removeSpecificMessage } = useSocket();
+  return (
+    <CardContainer className={`${priority}`} priority={priority} data-testid="card">
+      <p>
+        {message}
+      </p>
+      <div>
+        <Button onClick={() => removeSpecificMessage(message)}>
+          Clear
+        </Button>
+      </div>
+    </CardContainer>
+  )
 }
 
 export default Card;

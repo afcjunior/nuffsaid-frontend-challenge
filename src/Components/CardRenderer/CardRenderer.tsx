@@ -1,15 +1,13 @@
 import React from 'react';
-import { Message } from '../../Api';
+import { Message } from '../../types';
 import { Card, CardTitle } from '@Components';
 import { CardRendererContainer } from '@Components/CardRenderer/CardRenderer.style';
-import {
-  ERROR_PRIORITY, WARNING_PRIORITY, INFO_PRIORITY
-} from '../../constants';
+import { Priority } from '../../types';
 
 type ColumnProps = {
   messages: Message[];
   title: string;
-  priority: number;
+  priority: Priority;
 };
 
 const Column: React.FC<ColumnProps> = ({ messages, title, priority }) => {
@@ -20,7 +18,7 @@ const Column: React.FC<ColumnProps> = ({ messages, title, priority }) => {
       className={`card-renderer-column column-${priority}`}
     >
       <CardTitle title={title} length={prioritizedMessages.length} />
-      {prioritizedMessages?.map?.(msg => (
+      {prioritizedMessages && prioritizedMessages.map?.(msg => (
         <Card
           key={msg?.message}
           message={msg?.message}
@@ -42,17 +40,17 @@ const CardRenderer: React.FC<CardRendererProps> = ({ messages }) => {
       <Column
         title="Error Type 1"
         messages={messages}
-        priority={ERROR_PRIORITY}
+        priority={Priority.Error}
       />
       <Column
         title="Warning Type 2"
         messages={messages}
-        priority={WARNING_PRIORITY}
+        priority={Priority.Warn}
       />
       <Column
         title="Info Type 3"
         messages={messages}
-        priority={INFO_PRIORITY}
+        priority={Priority.Info}
       />
     </CardRendererContainer>
   );

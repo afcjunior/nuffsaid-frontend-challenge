@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import App from '@Containers/App/App';
 import reportWebVitals from './reportWebVitals';
 import { Toaster } from 'react-hot-toast';
+import { SocketProvider } from './Context/Socket'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <SocketProvider>
+      <App />
+    </SocketProvider>
     <Toaster />
   </React.StrictMode>,
   document.getElementById('root')

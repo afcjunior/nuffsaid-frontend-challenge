@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+import { Priority } from '../../types';
 import { priorityColors } from '../../constants';
 
-interface CardContainerProps {
-  priority: number;
+type CardContainerProps = {
+  priority: Priority;
 };
 
 export const CardContainer = styled.div<CardContainerProps>`

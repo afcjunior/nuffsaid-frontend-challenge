@@ -1,79 +1,53 @@
 import { Button } from '@material-ui/core';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import toast, { ToastPosition } from 'react-hot-toast';
-import generateMessage, { Message } from '../../Api';
 import { CardRenderer, PageTitle } from '@Components';
 import { Container, ToastContainer } from '@Containers/App/App.style';
-import { ContextType, MessagesContext } from '../../context';
-import { ERROR_PRIORITY, ERROR_COLOR } from '../../constants';
+import { Priority } from '../../types';
+import { priorityColors } from '../../constants';
+import { useSocket } from '../../Hooks/useSocket';
 
 const toastConfig = {
   duration: 2000,
-  id: '2',
+  id: `${Priority.Error}`,
   position: 'top-right' as ToastPosition,
   style: {
-    backgroundColor: ERROR_COLOR,
+    backgroundColor: priorityColors[Priority.Error],
     color: '#000'
   },
   iconTheme: {
     primary: '#000',
-    secondary: ERROR_COLOR,
+    secondary: priorityColors[Priority.Error],
   },
 }
 
 const App: React.FC<{}> = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [connected, setConnected] = useState(false);
-  const socketRef = useRef(() => {});
-  
-  const connectToSocket = useCallback(() => {
-    socketRef.current = generateMessage((message: Message) => {
-      setMessages(oldMessages => [message, ...oldMessages]);
-      setConnected(true);
-
-      if (message.priority === ERROR_PRIORITY) {
-        toast.error(message.message, toastConfig);
-
-        toast(
-          (t) => (
-            <ToastContainer
-              onClick={() => toast.dismiss(t.id)}
-            > 
-              ❌ {message.message}
-            </ToastContainer>
-          ),
-          toastConfig
-        );
-        
-      }
-    });
-
-    return disconnectFromSocket;
-  }, [setMessages])
-
-  const disconnectFromSocket = () => {
-    socketRef.current();
-    setConnected(false);
-  }
+  const {
+    messages,
+    connected,
+    connectToSocket,
+    disconnectFromSocket,
+    clearMessages
+  } = useSocket();
 
   useEffect(() => {
-    const disconnect = connectToSocket();
+    const mostRecentMessage = messages?.[0]
+    if (mostRecentMessage && mostRecentMessage.priority === Priority.Error) {
+      toast.error(mostRecentMessage.message, toastConfig);
 
-    return disconnect;
-  }, [connectToSocket]);
+      toast(
+        (t) => (
+          <ToastContainer
+            onClick={() => toast.dismiss(t.id)}
+          >
+            ❌ {mostRecentMessage.message}
+          </ToastContainer>
+        ),
+        toastConfig
+      );
 
-  const clearMessages = () => setMessages([])
-
-  const removeSpecificMessage = (message: string) => {
-    setMessages(oldMessages => {
-      const restOfMessages = oldMessages.filter(msg => msg.message !== message)
-      return restOfMessages;
-    })
-  }
-
-  const defaultContext: ContextType = {
-    removeSpecificMessage,
-  }
+    }
+  }, [messages])
 
   return (
     <Container>
@@ -81,7 +55,7 @@ const App: React.FC<{}> = () => {
       <div className="button-container">
         <Button
           style={{
-            backgroundColor: '#88FCA3',
+            backgroundColor: priorityColors[Priority.Info],
             padding: '5px 20px',
             fontWeight: 'bold'
           }}
@@ -93,7 +67,7 @@ const App: React.FC<{}> = () => {
         </Button>
         <Button
           style={{
-            backgroundColor: '#88FCA3',
+            backgroundColor: priorityColors[Priority.Info],
             padding: '5px 20px',
             fontWeight: 'bold'
           }}
@@ -104,9 +78,7 @@ const App: React.FC<{}> = () => {
           Clear
         </Button>
       </div>
-      <MessagesContext.Provider value={defaultContext}>
-        <CardRenderer messages={messages} />
-      </MessagesContext.Provider>
+      <CardRenderer messages={messages} />
     </Container>
   );
 }

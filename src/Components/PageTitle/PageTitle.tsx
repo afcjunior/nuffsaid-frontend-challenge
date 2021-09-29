@@ -1,7 +1,7 @@
 import React from 'react';
 import { TitleContainer } from '@Components/PageTitle/PageTitle.style';
 
-interface PageTitleProps {
+type PageTitleProps = {
   title?: string;
 };
 

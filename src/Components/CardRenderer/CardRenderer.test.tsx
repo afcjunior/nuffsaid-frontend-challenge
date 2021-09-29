@@ -20,13 +20,13 @@ describe('<CardRenderer /> Component', () => {
       <CardRenderer messages={mockMessages} />
     ));
 
-    const totalInfoMessages = mockMessages.filter(msg => msg.priority === Priority.Info).length
-    const totalWarningMessages = mockMessages.filter(msg => msg.priority === Priority.Warn).length
     const totalErrorMessages = mockMessages.filter(msg => msg.priority === Priority.Error).length
+    const totalWarningMessages = mockMessages.filter(msg => msg.priority === Priority.Warn).length
+    const totalInfoMessages = mockMessages.filter(msg => msg.priority === Priority.Info).length
 
-    expect(getByText(`Count ${totalInfoMessages}`)).toBeDefined();
-    expect(getByText(`Count ${totalWarningMessages}`)).toBeDefined();
     expect(getByText(`Count ${totalErrorMessages}`)).toBeDefined();
+    expect(getByText(`Count ${totalWarningMessages}`)).toBeDefined();
+    expect(getByText(`Count ${totalInfoMessages}`)).toBeDefined();
   });
 
   it('Should render info priority cards under the info column.', () => {

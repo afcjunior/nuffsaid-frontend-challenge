@@ -24,7 +24,15 @@ describe('<Card /> Component', () => {
     expect(getByText(mockMessage.message)).toBeDefined();
   });
 
-  it('Should render the background in the right color when priority is 0 (Warning).', () => {
+  it('Should render the background in the right color when priority is 0 (Error).', () => {
+    const { getByTestId } = render((
+      <Card message={mockMessage.message} priority={Priority.Error} />
+    ));
+
+    expect(getByTestId('card')).toHaveStyle(`background-color: ${priorityColors[Priority.Error]}`);
+  });
+
+  it('Should render the background in the right color when priority is 1 (Warning).', () => {
     const { getByTestId } = render((
       <Card message={mockMessage.message} priority={Priority.Warn} />
     ));
@@ -32,20 +40,12 @@ describe('<Card /> Component', () => {
     expect(getByTestId('card')).toHaveStyle(`background-color: ${priorityColors[Priority.Warn]}`);
   });
 
-  it('Should render the background in the right color when priority is 1 (Info).', () => {
+  it('Should render the background in the right color when priority is 2 (Info).', () => {
     const { getByTestId } = render((
       <Card message={mockMessage.message} priority={Priority.Info} />
     ));
 
     expect(getByTestId('card')).toHaveStyle(`background-color: ${priorityColors[Priority.Info]}`);
-  });
-
-  it('Should render the background in the right color when priority is 2 (Error).', () => {
-    const { getByTestId } = render((
-      <Card message={mockMessage.message} priority={Priority.Error} />
-    ));
-
-    expect(getByTestId('card')).toHaveStyle(`background-color: ${priorityColors[Priority.Error]}`);
   });
 
   it('Should allow the user to clear.', () => {

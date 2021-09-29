@@ -13,9 +13,9 @@ export const Container = styled.div`
   & > .button-container{
     display: flex;
     flex-direction: row;
-    width: 160px;
+    width: 180px;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
   }
 `;
 

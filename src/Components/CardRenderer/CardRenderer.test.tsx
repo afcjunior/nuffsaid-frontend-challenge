@@ -1,8 +1,73 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { MessagesContext } from '../../context';
+import { Priority } from '../../types';
 import CardRenderer from './CardRenderer';
-import { INFO_PRIORITY, WARNING_PRIORITY, ERROR_PRIORITY } from '../../constants';
+
+describe('<CardRenderer /> Component', () => {
+  it('Should render.', () => {
+    const { getByText } = render((
+      <CardRenderer messages={[]} />
+    ));
+
+    expect(getByText('Error Type 1')).toBeDefined();
+    expect(getByText('Warning Type 2')).toBeDefined();
+    expect(getByText('Info Type 3')).toBeDefined();
+
+  });
+
+  it('Should show correct amount of cards in each columns', () => {
+    const { getByText } = render((
+      <CardRenderer messages={mockMessages} />
+    ));
+
+    const totalInfoMessages = mockMessages.filter(msg => msg.priority === Priority.Info).length
+    const totalWarningMessages = mockMessages.filter(msg => msg.priority === Priority.Warn).length
+    const totalErrorMessages = mockMessages.filter(msg => msg.priority === Priority.Error).length
+
+    expect(getByText(`Count ${totalInfoMessages}`)).toBeDefined();
+    expect(getByText(`Count ${totalWarningMessages}`)).toBeDefined();
+    expect(getByText(`Count ${totalErrorMessages}`)).toBeDefined();
+  });
+
+  it('Should render info priority cards under the info column.', () => {
+    const infoMessages = mockMessages.filter(msg => msg.priority === Priority.Info);
+
+    const { getByText } = render((
+      <CardRenderer messages={mockMessages} />
+    ));
+
+    const specificInfoCard = getByText(infoMessages[0]?.message);
+    const infoCardParentColumn = specificInfoCard?.parentElement?.parentElement
+
+    expect(infoCardParentColumn?.className).toContain(`column-${Priority.Info}`);
+  });
+
+  it('Should render warning priority cards under the warning column.', () => {
+    const warnMessages = mockMessages.filter(msg => msg.priority === Priority.Warn);
+
+    const { getByText } = render((
+      <CardRenderer messages={mockMessages} />
+    ));
+
+    const specificCard = getByText(warnMessages[0]?.message);
+    const warnCardParentColumn = specificCard?.parentElement?.parentElement
+
+    expect(warnCardParentColumn?.className).toContain(`column-${Priority.Warn}`);
+  });
+
+  it('Should render error priority cards under the error column.', () => {
+    const errorMessages = mockMessages.filter(msg => msg.priority === Priority.Error);
+
+    const { getByText } = render((
+      <CardRenderer messages={mockMessages} />
+    ));
+
+    const specificCard = getByText(errorMessages[0]?.message);
+    const errorCardParentColumn = specificCard?.parentElement?.parentElement
+
+    expect(errorCardParentColumn?.className).toContain(`column-${Priority.Error}`);
+  });
+});
 
 const mockMessages = [
   {
@@ -70,99 +135,3 @@ const mockMessages = [
       "priority": 2
   },
 ]
-
-describe('<CardRenderer /> Component', () => {
-  it('Should render.', () => {
-    const mockContext = {
-      removeSpecificMessage: () => jest.fn()
-    }
-
-    const { getByText } = render((
-    <MessagesContext.Provider value={mockContext}>
-      <CardRenderer messages={[]} />
-    </MessagesContext.Provider>
-    ));
-
-    expect(getByText('Error Type 1')).toBeDefined();
-    expect(getByText('Warning Type 2')).toBeDefined();
-    expect(getByText('Info Type 3')).toBeDefined();
-
-  });
-
-  it('Should show correct amount of cards in each columns', () => {
-    const mockContext = {
-      removeSpecificMessage: () => jest.fn()
-    }
-
-    const { getByText } = render((
-    <MessagesContext.Provider value={mockContext}>
-      <CardRenderer messages={mockMessages} />
-    </MessagesContext.Provider>
-    ));
-
-    const totalInfoMessages = mockMessages.filter(msg => msg.priority === INFO_PRIORITY).length
-    const totalWarningMessages = mockMessages.filter(msg => msg.priority === WARNING_PRIORITY).length
-    const totalErrorMessages = mockMessages.filter(msg => msg.priority === ERROR_PRIORITY).length
-
-    expect(getByText(`Count ${totalInfoMessages}`)).toBeDefined();
-    expect(getByText(`Count ${totalWarningMessages}`)).toBeDefined();
-    expect(getByText(`Count ${totalErrorMessages}`)).toBeDefined();
-  });
-
-  it('Should render info priority cards under the info column.', () => {
-    const mockContext = {
-      removeSpecificMessage: () => jest.fn()
-    }
-
-    const infoMessages = mockMessages.filter(msg => msg.priority === INFO_PRIORITY);
-
-    const { getByText } = render((
-    <MessagesContext.Provider value={mockContext}>
-      <CardRenderer messages={mockMessages} />
-    </MessagesContext.Provider>
-    ));
-
-    const specificInfoCard = getByText(infoMessages[0]?.message);
-    const infoCardParentColumn = specificInfoCard?.parentElement?.parentElement
-
-    expect(infoCardParentColumn?.className).toContain(`column-${INFO_PRIORITY}`);
-  });
-
-  it('Should render warning priority cards under the warning column.', () => {
-    const mockContext = {
-      removeSpecificMessage: () => jest.fn()
-    }
-
-    const warnMessages = mockMessages.filter(msg => msg.priority === WARNING_PRIORITY);
-
-    const { getByText } = render((
-    <MessagesContext.Provider value={mockContext}>
-      <CardRenderer messages={mockMessages} />
-    </MessagesContext.Provider>
-    ));
-
-    const specificCard = getByText(warnMessages[0]?.message);
-    const warnCardParentColumn = specificCard?.parentElement?.parentElement
-
-    expect(warnCardParentColumn?.className).toContain(`column-${WARNING_PRIORITY}`);
-  });
-
-  it('Should render error priority cards under the error column.', () => {
-    const mockContext = {
-      removeSpecificMessage: () => jest.fn()
-    }
-
-    const errorMessages = mockMessages.filter(msg => msg.priority === ERROR_PRIORITY);
-
-    const { getByText } = render((
-    <MessagesContext.Provider value={mockContext}>
-      <CardRenderer messages={mockMessages} />
-    </MessagesContext.Provider>
-    ));
-
-    const specificCard = getByText(errorMessages[0]?.message);
-    const errorCardParentColumn = specificCard?.parentElement?.parentElement
-
-    expect(errorCardParentColumn?.className).toContain(`column-${ERROR_PRIORITY}`);
-  });
-});

@@ -6,6 +6,13 @@ import { Priority } from '../../types';
 import { priorityColors } from '../../constants';
 import { useSocket } from '../../Hooks/useSocket';
 
+/*
+  TODO: (if given more time)
+  - write tests for the socket hook
+  - add more test cases all around
+  - improve aliases
+*/
+
 const App: React.FC<{}> = () => {
   const { messages } = useSocket();
 
